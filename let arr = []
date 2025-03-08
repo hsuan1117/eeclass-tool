@@ -1,0 +1,64 @@
+let arr = []
+
+document.querySelector("#list").childNodes.forEach((item)=>{
+    if(item.innerText){
+        let name = item.innerText.split("\n")[1]
+        let date = item.innerText.split("\n")[2]
+        let loc = item.innerText.split("\n")[3]
+        let price = item.innerText.split("\n")[4].replaceAll(",","").replaceAll("元","").replaceAll("$","").replaceAll("https://reurl.cc/0XVmxM","0").replaceAll("/團報價請洽詢粉專","").replaceAll("[","(").replaceAll("]",")").replaceAll("每人新臺幣","").replaceAll("新台幣","").replaceAll("，此為不包含住宿的費用","").replaceAll(" (中低收入戶 4300)","").replaceAll(" ","").replaceAll("／", "/").replaceAll("（", "(").replaceAll("）",")").replaceAll("10800~16800(有早鳥優惠及團報價)","0").replaceAll("(須繳交保證金1000)","")
+        let start ;
+        let end;
+        if(date.split("~").length === 2){
+            start = new Date(date.split("~")[0])
+            end = new Date(date.split("~")[1])
+        } else {
+            start = new Date(date)
+        }
+        let offers = []
+        price = price.split("/")
+        if(price.length === 1) {
+            if(price[0] === "免費") {
+                offers.push({
+                    name: "一般",
+                    price: 0
+                })
+            } else {
+                offers.push({
+                    name: /(\(\S+\))(\d{3,4})/gu.exec(price[0])?.[1] ?? price[0],
+                    price: parseInt(/(\(\S+\))(\d{3,4})/gu.exec(price[0])?.[2] ?? price[0]) ?? 0
+                })
+            }
+        } else {
+            price = price.forEach((p)=>{
+                offers.push({
+                    name: /(\(\S+\))(\d{3,4})/gu.exec(p)?.[1] ?? p,
+                    price: parseInt(/(\(\S+\))(\d{3,4})/gu.exec(p)?.[2] ?? p) ?? 0
+                })
+            })
+        }
+
+        let tags = item.innerText.split("\n")[5].split(" ").map(x=>x.replace("#", ''))
+        let apply_end = item.innerText.split("\n")[0].replace(" 截止", "")
+
+        if(apply_end.indexOf("11") || apply_end.indexOf("12")) {
+            apply_end = new Date("2022/"+apply_end)
+        } else {
+               apply_end = new Date("2023/"+apply_end)
+        }
+
+        //console.log(`name: ${name}, ${start} ${end}, ${tags}`)
+        arr.push({
+            name,
+            school: loc.split("大")[0] + "大學",
+            department: loc.replace(loc.split("大")[0], ""),
+            start,
+            end,
+            apply_end,
+            tags,
+            offers,
+            url: decodeURIComponent(item.dataset.link)
+        })
+    }
+})
+
+console.log(JSON.stringify(arr))

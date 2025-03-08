@@ -1,0 +1,25 @@
+{
+  "name": "eeClass 助手",
+  "version": "0.0.0.2",
+  "manifest_version": 3,
+  "description": "A chromium extension to show NASA's Picture of the Day.",
+  "icons": {
+    "16": "icons/nasapod16x16.png",
+    "32": "icons/nasapod32x32.png",
+    "48": "icons/nasapod48x48.png",
+    "128": "icons/nasapod128x128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://eeclass.nthu.edu.tw/dashboard",
+        "https://oauth.ccxp.nthu.edu.tw/v1.1/authorize.php*"
+      ],
+      "js": [
+        "thirdParty/moment.min.js",
+        "thirdParty/zh-tw.min.js",
+        "inject.js"
+      ]
+    }
+  ]
+}
