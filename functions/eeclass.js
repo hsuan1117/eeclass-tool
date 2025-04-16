@@ -1,6 +1,6 @@
 function doWithCourseATag(item) {
     fetch(item.href).then(r => r.text()).then(res => {
-        if (res.indexOf("修改我的作業") > -1) {
+        if (res.indexOf("修改我的作業") > -1 || res.indexOf("檢視我的作業") > -1) {
             // 已經繳交
             item.style.textDecoration = 'line-through'
             item.innerHTML += "&nbsp;&nbsp;&nbsp;&nbsp;<span style='color: green;'>V</span>"
